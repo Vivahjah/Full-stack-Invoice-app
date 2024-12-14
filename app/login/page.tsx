@@ -30,7 +30,7 @@ export default async function Login() {
                             {/* Imput should have name, type propertiy to work */}
                             <Input name="email" type="email" required placeholder="Hello@hello.com" />
                         </div>
-                        <SubmitButton />
+                        <SubmitButton text="Submit" />
                     </form>
                 </CardContent>
 
