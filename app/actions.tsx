@@ -29,7 +29,7 @@ export async function onboardUser(prevState: unknown, formData: FormData) {
         
     })
 
-return redirect("/dashoard")
+return redirect("/dashboard")
 
 }
 

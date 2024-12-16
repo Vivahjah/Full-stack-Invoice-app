@@ -33,23 +33,25 @@ export default function OnboardingPage() {
                     <CardDescription>Enter your information to create an account</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form action={formAction} onSubmit={form.onSubmit} id={form.id} className="flex flex-col gap-4"
+                    <form action={formAction} onSubmit={form.onSubmit} id={form.id} noValidate className="flex flex-col gap-4"
                     >
                         <div className="flex gap-3">
                             <div className="flex flex-col gap-2">
                                 <Label>First Name</Label>
-                                <Input placeholder="John" />
-                                <p className="text-red-500 text-sm">{fields?.firstName?.errors}
-                                </p>
+                                <Input name={fields.firstName.name} defaultValue={fields.firstName.initialValue} key={fields.firstName.key} placeholder="John" />
+                                <p className="text-red-500 text-sm">{fields?.firstName.errors} </p>
                             </div>
                             <div className="flex flex-col gap-2">
                                 <Label>Last Name</Label>
-                                <Input placeholder="Smith" />
+                                <Input name={fields.lastName.name} defaultValue={fields.lastName.initialValue} key={fields.lastName.key} placeholder="Smith" />
+                                <p className="text-red-500 text-sm">{fields?.lastName.errors} </p>
                             </div>
                         </div>
                         <div className=" flex flex-col gap-2">
                             <Label>Address</Label>
-                            <Input placeholder="123D Chad Street" />
+                            <Input name={fields.address.name} defaultValue={fields.address.initialValue} key={fields.address.key} placeholder="123D Chad Street" />
+                            <p className="text-red-500 text-sm">{fields?.address.errors} </p>
+
                         </div>
                         <SubmitButton text="Finish onboarding" />
 
