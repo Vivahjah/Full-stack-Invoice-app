@@ -1,16 +1,27 @@
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { InvoiceList } from "@/app/components/InvoiceList";
+import { buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { PlusIcon } from "lucide-react";
+import Link from "next/link";
 
-export default function InvoicePage(){
-    return(
+export default function InvoicePage() {
+    return (
         <Card>
             <CardHeader>
-                <div className="flex items-center justiify-between">
+                <div className="flex items-center justify-between">
                     <div>
-                        <CardTitle>Invoices</CardTitle>
-                        <CardDescription>Manage your Invoices</CardDescription>
+                        <CardTitle className="text-2xl font-bold">Invoices</CardTitle>
+                        <CardDescription>Manage your Invoices Here</CardDescription>
+
                     </div>
+                    <Link href={"/dashboard/invoices/create"} className={buttonVariants()}>
+                        <PlusIcon /> Create Invoice
+                    </Link>
                 </div>
             </CardHeader>
+            <CardContent>
+                <InvoiceList />
+            </CardContent>
         </Card>
     )
 }
