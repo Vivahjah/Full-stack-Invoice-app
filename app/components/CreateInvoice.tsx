@@ -16,7 +16,15 @@ import SubmitButton from "./SubmitButton";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { invoiceSchema } from "../utils/zodSchema";
-import { Value } from "@radix-ui/react-select";
+
+
+const formatCurrency = (amount : number) => {
+    return new Intl.NumberFormat("en-US", {
+        style : "currency",
+        currency : "USD"
+    }).format(amount);
+    
+}
 
 export default function CreateInvoice() {
 
@@ -38,7 +46,10 @@ export default function CreateInvoice() {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [quantity, setQuantity] = useState("")
     const [rate, setRate] = useState("")
-    const [total, setTotal] = useState("")
+    const [currency, setCurrency] = useState("USD")
+
+    const calculateTotal =( Number(quantity) || 0) *( Number(rate) || 0);
+
 
 
 
@@ -65,7 +76,7 @@ export default function CreateInvoice() {
                         </div>
                         <div className="">
                             <Label>Currency</Label>
-                            <Select defaultValue="USD" >
+                            <Select defaultValue="USD" name={fields.currency.name} key={fields.currency.name} onValueChange={(value) => setCurrency(value)} >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select Currency" />
                                 </SelectTrigger>
@@ -73,7 +84,7 @@ export default function CreateInvoice() {
                                     <SelectItem value="USD">United State Dollar -- USD</SelectItem>
                                     <SelectItem value="EUR">Euro -- EUR</SelectItem>
                                 </SelectContent>
-                            </Select>
+                            </Select>  
                             <p className="text-sm text-red-600">{fields.currency.errors}</p>
                         </div>
                     </div>
@@ -153,15 +164,15 @@ export default function CreateInvoice() {
                                 <p className="text-sm text-red-600">{fields.invoiceItemDescription.errors}</p>
                             </div>
                             <div className="col-span-2">
-                                <Input value={quantity} onChange={(e) => e.target.value} name={fields.invoiceItemQuantity.name} key={fields.invoiceItemQuantity.key} defaultValue={fields.invoiceItemQuantity.initialValue} type="number" placeholder="0" />
+                                <Input value={quantity} onChange={(e) => setQuantity(e.target.value)} name={fields.invoiceItemQuantity.name} key={fields.invoiceItemQuantity.key} defaultValue={fields.invoiceItemQuantity.initialValue} type="number" placeholder="0" />
                                 <p className="text-sm  text-red-600">{fields.invoiceItemQuantity.errors}</p>
                             </div>
                             <div className="col-span-2">
-                                <Input name={fields.invoiceItemRate.name} key={fields.invoiceItemRate.key} defaultValue={fields.invoiceItemRate.initialValue} type="number" placeholder="0" />
+                                <Input value={rate} onChange={(e) => setRate(e.target.value)} name={fields.invoiceItemRate.name} key={fields.invoiceItemRate.key} defaultValue={fields.invoiceItemRate.initialValue} type="number" placeholder="0" />
                                 <p className="text-sm text-red-600">{fields.invoiceItemRate.errors}</p>
                             </div>
                             <div className="col-span-2">
-                                <Input type="number" placeholder="0" disabled />
+                                <Input value={formatCurrency(calculateTotal)}  disabled />
 
                             </div>
                         </div>
@@ -173,8 +184,8 @@ export default function CreateInvoice() {
                                 <span>$5.00</span>
                             </div>
                             <div className="flex justify-between py-2 border-t">
-                                <span>Total (USD)</span>
-                                <span className="font-medium underline underline-offset-4">$5.00</span>
+                                <span>Total ({currency})</span>
+                                <span className="font-medium underline underline-offset-4">{formatCurrency(calculateTotal)} </span>
                             </div>
 
                         </div>

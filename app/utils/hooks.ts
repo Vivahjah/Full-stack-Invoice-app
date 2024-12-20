@@ -8,10 +8,9 @@ const requiredUser = async () => {
         redirect("/login")
     }
 
-    return session;
-
-
-
+    return session; 
 }
+
+
 
 export { requiredUser } 
