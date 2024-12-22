@@ -16,15 +16,8 @@ import SubmitButton from "./SubmitButton";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { invoiceSchema } from "../utils/zodSchema";
+import { formatCurrency } from "../utils/formatCurrency";
 
-
-const formatCurrency = (amount : number) => {
-    return new Intl.NumberFormat("en-US", {
-        style : "currency",
-        currency : "USD"
-    }).format(amount);
-    
-}
 
 export default function CreateInvoice() {
 
@@ -42,13 +35,15 @@ export default function CreateInvoice() {
         shouldRevalidate: "onInput"
 
     })
+   
+
 
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [quantity, setQuantity] = useState("")
     const [rate, setRate] = useState("")
     const [currency, setCurrency] = useState("USD")
 
-    const calculateTotal =( Number(quantity) || 0) *( Number(rate) || 0);
+    const calculateTotal = (Number(quantity) || 0) * (Number(rate) || 0);
 
 
 
@@ -58,10 +53,11 @@ export default function CreateInvoice() {
             <CardContent className="p-6">
                 <form id={form.id} action={action} onSubmit={form.onSubmit}>
                     <Input type={"hidden"} name={fields.date.name} value={selectedDate.toISOString()} />
+                    <Input type={"hidden"} name={fields.total.name} value={calculateTotal}  />
                     <div className="flex flex-col gap-1 mb-6">
                         <div className="flex items-center gap-4">
                             <Badge variant={"secondary"}>Draft</Badge>
-                            <Input name={fields.invoiceName.name} key={fields.invoiceName.key} defaultValue={fields.invoiceName.initialValue} placeholder="Test 123" className="w-fit" />
+                            <Input  name={fields.invoiceName.name} key={fields.invoiceName.key} defaultValue={fields.invoiceName.initialValue} placeholder="Test 123" className="w-fit" />
                         </div>
                         <p className="text-sm text-red-600">{fields.invoiceName.errors}</p>
                     </div>
@@ -70,7 +66,7 @@ export default function CreateInvoice() {
                             <Label>Invoice No.</Label>
                             <div className="flex">
                                 <span className=" border border-r-0 rounded-l-md bg-muted flex items-center  px-3">#</span>
-                                <Input name={fields.invoiceNumber.name} key={fields.invoiceNumber.key} defaultValue={fields.invoiceNumber.initialValue} className="rounded-l-none" placeholder="5" />
+                                <Input type="number" name={fields.invoiceNumber.name} key={fields.invoiceNumber.key} defaultValue={fields.invoiceNumber.initialValue} className="rounded-l-none" placeholder="5" />
                             </div>
                             <p className="text-sm text-red-600">{fields.invoiceNumber.errors}</p>
                         </div>
@@ -84,7 +80,7 @@ export default function CreateInvoice() {
                                     <SelectItem value="USD">United State Dollar -- USD</SelectItem>
                                     <SelectItem value="EUR">Euro -- EUR</SelectItem>
                                 </SelectContent>
-                            </Select>  
+                            </Select>
                             <p className="text-sm text-red-600">{fields.currency.errors}</p>
                         </div>
                     </div>
@@ -138,7 +134,7 @@ export default function CreateInvoice() {
                             <div>
                                 <Label>Invoice Due</Label>
                             </div>
-                            <Select defaultValue="0" name={fields.dueDate.name} key={fields.dueDate.key} >
+                            <Select defaultValue="15" name={fields.dueDate.name} key={fields.dueDate.key} >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select due Date" />
                                 </SelectTrigger>
@@ -160,7 +156,7 @@ export default function CreateInvoice() {
                         </div>
                         <div className="grid grid-cols-12 gap-4 mb-4">
                             <div className="col-span-6">
-                                <Textarea name={fields.invoiceItemDescription.name} key={fields.invoiceItemDescription.key} defaultValue={fields.invoiceItemDescription.initialValue} placeholder="Item name & description" />
+                                <Textarea  name={fields.invoiceItemDescription.name} key={fields.invoiceItemDescription.key} defaultValue={fields.invoiceItemDescription.initialValue} placeholder="Item name & description" />
                                 <p className="text-sm text-red-600">{fields.invoiceItemDescription.errors}</p>
                             </div>
                             <div className="col-span-2">
@@ -172,7 +168,7 @@ export default function CreateInvoice() {
                                 <p className="text-sm text-red-600">{fields.invoiceItemRate.errors}</p>
                             </div>
                             <div className="col-span-2">
-                                <Input value={formatCurrency(calculateTotal)}  disabled />
+                                <Input value={formatCurrency({amount : calculateTotal,  currency : currency as "USD" | "EUR"})} disabled />
 
                             </div>
                         </div>
@@ -185,7 +181,7 @@ export default function CreateInvoice() {
                             </div>
                             <div className="flex justify-between py-2 border-t">
                                 <span>Total ({currency})</span>
-                                <span className="font-medium underline underline-offset-4">{formatCurrency(calculateTotal)} </span>
+                                <span className="font-medium underline underline-offset-4">{formatCurrency({amount : calculateTotal,  currency : currency as "USD" | "EUR"})} </span>
                             </div>
 
                         </div>
@@ -197,8 +193,8 @@ export default function CreateInvoice() {
                     </div>
                     <div className="flex items-center justify-end">
                         <div>
-                            <SubmitButton text="Send Invoice to Client" />
-
+                           
+                            <SubmitButton  text="Send Invoice to Client" />
                         </div>
                     </div>
                 </form>

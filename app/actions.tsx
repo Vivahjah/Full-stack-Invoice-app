@@ -6,6 +6,7 @@ import { invoiceSchema, onboardingSchema } from "./utils/zodSchema";
 import prisma from "./utils/db";
 import { redirect } from "next/navigation";
 
+
 export async function onboardUser(prevState: unknown, formData: FormData) {
     const session = await requiredUser();
 
@@ -15,7 +16,7 @@ export async function onboardUser(prevState: unknown, formData: FormData) {
 
     if (submission.status !== "success") return submission.reply();
 
-     await prisma.user.update({
+    await prisma.user.update({
         where: {
             id: session.user?.id
         },
@@ -26,47 +27,48 @@ export async function onboardUser(prevState: unknown, formData: FormData) {
 
         }
 
-        
+
     })
 
-return redirect("/dashboard")
+    return redirect("/dashboard")
 
 }
 
 
-export async function createInvoice(prevState : unknown, formData : FormData) {
-     await requiredUser();
+export async function createInvoice(prevState: unknown, formData: FormData) {
+    const session = await requiredUser();
     const submission = parseWithZod(formData, {
-        schema : invoiceSchema,
+        schema: invoiceSchema,
     });
 
-    if(submission.status !== "success"){
+
+    if (submission.status !== "success") {
         return submission.reply()
     }
-
     await prisma.invoice.create({
-        data : {
-            clientAddress : submission.value.clientAddress,
-            clientEmail : submission.value.clientEmail,
-            clientName : submission.value.clientName,
-            currency : submission.value.currency,
-            date : submission.value.date,
-            dueDate : submission.value.dueDate,
-            invoiceItemDescription : submission.value.invoiceItemDescription,
-            invoiceItemRate : submission.value.invoiceItemRate,
-            fromEmail : submission.value.fromEmail,
-            fromAddress : submission.value.fromAddress,
-            fromName : submission.value.fromName,
+        data: {
+            clientAddress: submission.value.clientAddress,
+            clientEmail: submission.value.clientEmail,
+            clientName: submission.value.clientName,
+            currency: submission.value.currency,
+            date: submission.value.date,
+            dueDate: submission.value.dueDate,
+            fromAddress: submission.value.fromAddress,
+            fromEmail: submission.value.fromEmail,
+            fromName: submission.value.fromName,
+            invoiceItemDescription: submission.value.invoiceItemDescription,
+            invoiceItemQuantity: submission.value.invoiceItemQuantity,
+            invoiceItemRate: submission.value.invoiceItemRate,
+            invoiceName: submission.value.invoiceName,
+            invoiceNumber: submission.value.invoiceNumber,
             status: submission.value.status,
-            invoiceName : submission.value.invoiceName,
-            invoiceNumber : submission.value.invoiceNumber,
-            note : submission.value.note,
-            invoiceItemQuantity : submission.value.invoiceItemQuantity,
-            total : submission.value.total,
-           },
+            total: submission.value.total,
+            note: submission.value.note,
+            userId: session.user?.id,
+        },
+    });
 
-    })
 
-    
+    return redirect("/dashboard/invoices");
+
 }
-
