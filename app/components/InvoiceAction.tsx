@@ -1,10 +1,34 @@
+"use client"
+
+
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Check, DownloadCloudIcon, Mail, MoreHorizontal, PencilIcon, Trash } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
+
+type InvoiceActionProps = {
+    id : string
+}
 
 
-export function InvoiceAction(){
+
+export function InvoiceAction({id} : InvoiceActionProps){
+    const handleSendReminder = () => {
+        toast.promise(
+          fetch(`/api/email/${id}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }),
+          {
+            loading: "Sending reminder email...",
+            success: "Reminder email sent successfully",
+            error: "Failed to send reminder email",
+          }
+        );
+      };
     return(
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -14,19 +38,19 @@ export function InvoiceAction(){
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuItem asChild>
-                    <Link href={""} ><PencilIcon className="size-4 mr-2"/>  Edit Invoice</Link>
+                    <Link href={`/dashboard/invoices/${id}`} ><PencilIcon className="size-4 mr-2"/>  Edit Invoice</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                    <Link href={""} ><DownloadCloudIcon className="size-4 mr-2"/>  Download Invoice</Link>
+                    <Link href={`/api/invoice/${id}`} target="_blank"><DownloadCloudIcon className="size-4 mr-2"/>Download Invoice</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSendReminder}>
+                    <Mail className="size-4 mr-2"/>  Send Reminders
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                    <Link href={""} ><Mail className="size-4 mr-2"/>  Send Reminders</Link>
+                    <Link href={`/dashboard/invoices/${id}/paid`}><Check className="size-4 mr-2"/>  Mark as Paid</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                    <Link href={""} ><Check className="size-4 mr-2"/>  Mark as Paid</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                    <Link href={""} ><Trash className="size-4 mr-2"/>  Trash</Link>
+                    <Link href={`/dashboard/invoices/${id}/delete`} ><Trash className="size-4 mr-2"/>  Trash</Link>
                 </DropdownMenuItem>
               
             </DropdownMenuContent>

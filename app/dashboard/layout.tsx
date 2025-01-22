@@ -12,26 +12,27 @@ import { signOut } from "../utils/auth";
 import { ReactNode } from "react";
 import prisma from "../utils/db";
 import { redirect } from "next/navigation";
+import { Toaster } from "@/components/ui/sonner";
 
-async function getUser(userId : string){
+async function getUser(userId: string) {
     const data = await prisma.user.findUnique({
-        where : {
-            id : userId,
+        where: {
+            id: userId,
         },
-        select : {
-            firstName : true,
-            lastName : true,
-            address : true
+        select: {
+            firstName: true,
+            lastName: true,
+            address: true
         }
     });
 
-    if(!data?.firstName || !data?.lastName || !data?.address){
+    if (!data?.firstName || !data?.lastName || !data?.address) {
         redirect("/onboarding")
     }
 
 }
 
-export default async function DashboardLayout({children} : {children : ReactNode}) {
+export default async function DashboardLayout({ children }: { children: ReactNode }) {
     const session = await requiredUser();
     await getUser(session?.user?.id as string)
     return (
@@ -101,7 +102,7 @@ export default async function DashboardLayout({children} : {children : ReactNode
                 </div>
             </div>
 
-
+            <Toaster  theme="light" richColors closeButton/>
         </>
     )
 }  

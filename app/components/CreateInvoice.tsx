@@ -18,8 +18,16 @@ import { parseWithZod } from "@conform-to/zod";
 import { invoiceSchema } from "../utils/zodSchema";
 import { formatCurrency } from "../utils/formatCurrency";
 
+type InvoiceProps = {
+    firstName : string;
+    lastName : string;
+    address : string;
+    email : string;
 
-export default function CreateInvoice() {
+}
+
+
+export default function CreateInvoice({firstName, lastName, address, email} : InvoiceProps) {
 
     const [lastResult, action] = useActionState(createInvoice, undefined)
     const [form, fields] = useForm({
@@ -88,11 +96,11 @@ export default function CreateInvoice() {
                         <div>
                             <Label>From</Label>
                             <div className="space-y-2">
-                                <Input placeholder="Your Name" name={fields.fromName.name} key={fields.fromName.key} defaultValue={fields.fromName.initialValue} />
+                                <Input  placeholder="Your Name" name={fields.fromName.name} key={fields.fromName.key} defaultValue={firstName + " " + lastName} />
                                 <p className="text-sm text-red-600">{fields.fromName.errors}</p>
-                                <Input placeholder="Your Email" name={fields.fromEmail.name} key={fields.fromEmail.key} defaultValue={fields.fromEmail.initialValue} />
+                                <Input placeholder="Your Email" name={fields.fromEmail.name} key={fields.fromEmail.key} defaultValue={email} />
                                 <p className="text-sm text-red-600">{fields.fromEmail.errors}</p>
-                                <Input placeholder="Your Address" name={fields.fromAddress.name} key={fields.fromAddress.key} defaultValue={fields.fromAddress.initialValue} />
+                                <Input placeholder="Your Address" name={fields.fromAddress.name} key={fields.fromAddress.key} defaultValue={address} />
                                 <p className="text-sm text-red-600">{fields.fromAddress.errors}</p>
                             </div>
 
