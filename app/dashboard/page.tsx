@@ -13,16 +13,6 @@ export default async function Dashboard() {
 
 
     return (
-        <div className="">
-            <h1>This is the Dashboard Page</h1>
-            <form
-                action={async () => {
-                    "use server";
-                    await signOut();
-                }}
-            >
-                <button type="submit">Sign Out</button>
-            </form>
-        </div>
+        <div className=""></div>
     );
 }

@@ -19,15 +19,15 @@ import { invoiceSchema } from "../utils/zodSchema";
 import { formatCurrency } from "../utils/formatCurrency";
 
 type InvoiceProps = {
-    firstName : string;
-    lastName : string;
-    address : string;
-    email : string;
+    firstName: string;
+    lastName: string;
+    address: string;
+    email: string;
 
 }
 
 
-export default function CreateInvoice({firstName, lastName, address, email} : InvoiceProps) {
+export default function CreateInvoice({ firstName, lastName, address, email }: InvoiceProps) {
 
     const [lastResult, action] = useActionState(createInvoice, undefined)
     const [form, fields] = useForm({
@@ -43,7 +43,7 @@ export default function CreateInvoice({firstName, lastName, address, email} : In
         shouldRevalidate: "onInput"
 
     })
-   
+
 
 
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -61,11 +61,11 @@ export default function CreateInvoice({firstName, lastName, address, email} : In
             <CardContent className="p-6">
                 <form id={form.id} action={action} onSubmit={form.onSubmit}>
                     <Input type={"hidden"} name={fields.date.name} value={selectedDate.toISOString()} />
-                    <Input type={"hidden"} name={fields.total.name} value={calculateTotal}  />
+                    <Input type={"hidden"} name={fields.total.name} value={calculateTotal} />
                     <div className="flex flex-col gap-1 mb-6">
                         <div className="flex items-center gap-4">
                             <Badge variant={"secondary"}>Draft</Badge>
-                            <Input  name={fields.invoiceName.name} key={fields.invoiceName.key} defaultValue={fields.invoiceName.initialValue} placeholder="Test 123" className="w-fit" />
+                            <Input name={fields.invoiceName.name} key={fields.invoiceName.key} defaultValue={fields.invoiceName.initialValue} placeholder="Test 123" className="w-fit" />
                         </div>
                         <p className="text-sm text-red-600">{fields.invoiceName.errors}</p>
                     </div>
@@ -96,7 +96,7 @@ export default function CreateInvoice({firstName, lastName, address, email} : In
                         <div>
                             <Label>From</Label>
                             <div className="space-y-2">
-                                <Input  placeholder="Your Name" name={fields.fromName.name} key={fields.fromName.key} defaultValue={firstName + " " + lastName} />
+                                <Input placeholder="Your Name" name={fields.fromName.name} key={fields.fromName.key} defaultValue={firstName + " " + lastName} />
                                 <p className="text-sm text-red-600">{fields.fromName.errors}</p>
                                 <Input placeholder="Your Email" name={fields.fromEmail.name} key={fields.fromEmail.key} defaultValue={email} />
                                 <p className="text-sm text-red-600">{fields.fromEmail.errors}</p>
@@ -164,7 +164,7 @@ export default function CreateInvoice({firstName, lastName, address, email} : In
                         </div>
                         <div className="grid grid-cols-12 gap-4 mb-4">
                             <div className="col-span-6">
-                                <Textarea  name={fields.invoiceItemDescription.name} key={fields.invoiceItemDescription.key} defaultValue={fields.invoiceItemDescription.initialValue} placeholder="Item name & description" />
+                                <Textarea name={fields.invoiceItemDescription.name} key={fields.invoiceItemDescription.key} defaultValue={fields.invoiceItemDescription.initialValue} placeholder="Item name & description" />
                                 <p className="text-sm text-red-600">{fields.invoiceItemDescription.errors}</p>
                             </div>
                             <div className="col-span-2">
@@ -176,7 +176,7 @@ export default function CreateInvoice({firstName, lastName, address, email} : In
                                 <p className="text-sm text-red-600">{fields.invoiceItemRate.errors}</p>
                             </div>
                             <div className="col-span-2">
-                                <Input value={formatCurrency({amount : calculateTotal,  currency : currency as "USD" | "EUR"})} disabled />
+                                <Input value={formatCurrency({ amount: calculateTotal, currency: currency as "USD" | "EUR" })} disabled />
 
                             </div>
                         </div>
@@ -189,7 +189,7 @@ export default function CreateInvoice({firstName, lastName, address, email} : In
                             </div>
                             <div className="flex justify-between py-2 border-t">
                                 <span>Total ({currency})</span>
-                                <span className="font-medium underline underline-offset-4">{formatCurrency({amount : calculateTotal,  currency : currency as "USD" | "EUR"})} </span>
+                                <span className="font-medium underline underline-offset-4">{formatCurrency({ amount: calculateTotal, currency: currency as "USD" | "EUR" })} </span>
                             </div>
 
                         </div>
@@ -201,8 +201,8 @@ export default function CreateInvoice({firstName, lastName, address, email} : In
                     </div>
                     <div className="flex items-center justify-end">
                         <div>
-                           
-                            <SubmitButton  text="Send Invoice to Client" />
+
+                            <SubmitButton text="Send Invoice to Client" />
                         </div>
                     </div>
                 </form>
