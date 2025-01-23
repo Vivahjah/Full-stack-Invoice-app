@@ -1,6 +1,8 @@
 
 import { redirect } from "next/navigation";
 import { auth, signOut } from "../utils/auth";
+import { DashboardBlocks } from "../components/DashboardBlocks";
+
 
 
 
@@ -13,6 +15,8 @@ export default async function Dashboard() {
 
 
     return (
-        <div className=""></div>
+        <div className="">
+            <DashboardBlocks />
+        </div>
     );
 }
